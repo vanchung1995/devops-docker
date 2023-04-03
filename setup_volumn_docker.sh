@@ -10,3 +10,8 @@ mkdir -p $DOCKER_NEXUS_DATA_PATH
 # usermod -a -G examplegroup exampleusername
 chmod 777 -R $DOCKER_NEXUS_DATA_PATH
 # sudo chown -R 200 $DOCKER_NEXUS_DATA_PATH # 200 because it's the UID of the nexus user inside the container
+
+
+# setup jenkins
+wget http://mirrors.estointernet.in/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+tar -xvzf apache-maven-3.6.3-bin.tar.gz
