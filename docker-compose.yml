@@ -8,6 +8,22 @@ services:
       - 8081:8081
     container_name: nexus
     restart: unless-stopped
+
+  portainer:
+    image: portainer/portainer-ce
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./docker-data/portainer_data:/data portainer/portainer-ce
+    ports:
+      - 8000:8000 
+      - 9000:9000
+    container_name: portainer
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          # cpus: '0.001'
+          memory: 1G
   
   jenkins:
     image: jenkins/jenkins:lts
@@ -18,8 +34,17 @@ services:
       - 50000:50000
     container_name: jenkins
     volumes:
-      - ./docker-data/jenkins_configuration:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ./docker-data/jenkins-data:/var/jenkins_home
+      # - /var/run/docker.sock:/var/run/docker.sock
       - /usr/lib/jvm/java-8-openjdk-amd64:/opt/openjdk
+      - /home/vanchung1995/Downloads/apache-maven-3.9.1:/opt/maven-3.9.1
       # - ./docker-data/jenkins-docker-certs:/certs/client:ro
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          # cpus: '0.001'
+          memory: 1G
+        # reservations:
+        #   cpus: '0.0001'
+        #   memory: 20M
