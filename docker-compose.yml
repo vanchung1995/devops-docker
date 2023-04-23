@@ -26,20 +26,24 @@ services:
           memory: 1G
   
   jenkins:
-    image: jenkins/jenkins:lts
+    image: jenkins/jenkins:lts-jdk8
+    # image: myjenkins-blueocean:2.387.2-1
     privileged: true
     user: root
     ports:
-      - 8080:8080
+      - 8899:8080
       - 50000:50000
     container_name: jenkins
     volumes:
-      - ./docker-data/jenkins-data:/var/jenkins_home
-      # - /var/run/docker.sock:/var/run/docker.sock
+      - ./docker-data/jenkins-data-jdk8:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
       - /usr/lib/jvm/java-8-openjdk-amd64:/opt/openjdk
       - /home/vanchung1995/Downloads/apache-maven-3.9.1:/opt/maven-3.9.1
+      - ./docker-data/jenkins-docker-certs:/certs/client:ro
       # - ./docker-data/jenkins-docker-certs:/certs/client:ro
     restart: unless-stopped
+    environment:
+      - JAVA_OPTS="-Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true"
     deploy:
       resources:
         limits:

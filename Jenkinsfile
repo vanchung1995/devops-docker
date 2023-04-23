@@ -5,6 +5,7 @@ pipeline {
         // Install the Maven version configured as "M3" and add it to the path.
         maven "mvn"
         jdk "java8"
+        'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'docker'
     }
 
     stages {
@@ -18,10 +19,6 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh "java -version"
-                sh "javac -version"
-                sh "git --version"
-                sh "mvn -version"
                 // Get some code from a GitHub repository
                 git url: 'https://gitlab.com/vanchung1995/hellospring', branch: 'master', credentialsId: 'gitlab_chungvv'
                 sh "ls -la"
@@ -40,6 +37,11 @@ pipeline {
                     junit '**/target/surefire-reports/TEST-*.xml'
                     archiveArtifacts 'target/*.jar'
                 }
+            }
+        }
+        stage('Build docker') {
+            steps {
+                sh 'docker build -t hellospring .'
             }
         }
     }
